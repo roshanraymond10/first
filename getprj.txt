@@ -103,6 +103,59 @@ Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])->name(
  <js7>: Create Blade Views (resources/views/tasks/)
 index.blade.php, create.blade.php, edit.blade.php (Basic form and table views)
 
+
+@extends('layouts.app')
+
+@section('content')
+<h2>Task List</h2>
+<a href="{{ route('tasks.create') }}">Add New Task</a>
+
+<table border="1">
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    @foreach ($tasks as $task)
+    <tr>
+        <td>{{ $task->title }}</td>
+        <td>{{ $task->description }}</td>
+        <td>{{ $task->completed ? 'Completed' : 'Pending' }}</td>
+        <td>
+            <a href="{{ route('tasks.edit', $task) }}">Edit</a>
+            <form method="POST" action="{{ route('tasks.destroy', $task) }}" style="display:inline;">
+                @csrf @method('DELETE')
+                <button type="submit">Delete</button>
+            </form>
+            <form method="POST" action="{{ route('tasks.complete', $task) }}" style="display:inline;">
+                @csrf
+                <button type="submit">Mark as Completed</button>
+            </form>
+        </td>
+    </tr>
+    @endforeach
+</table>
+@endsection
+
+
+<form method="POST" action="{{ route('tasks.store') }}">
+    @csrf
+    <label>Title: <input type="text" name="title" required></label><br>
+    <label>Description: <textarea name="description"></textarea></label><br>
+    <button type="submit">Save Task</button>
+</form>//create.blade
+
+
+
+<h2>Edit Task</h2>
+<form method="POST" action="{{ route('tasks.update', $task) }}">
+    @csrf @method('PUT')
+    <label>Title: <input type="text" name="title" value="{{ $task->title }}" required></label><br>
+    <label>Description: <textarea name="description">{{ $task->description }}</textarea></label><br>
+    <button type="submit">Update Task</button>
+</form>//edit.blade
+
  Step 8: Run the Laravel Development Server
 php artisan serve
 
