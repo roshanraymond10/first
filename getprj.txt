@@ -1,22 +1,21 @@
 <?php
-// Task Management System in Laravel
 
-// Step 1: Create a Laravel Project
-// Run the following command in your terminal
-// composer create-project --prefer-dist laravel/laravel TaskManager
+<js1>:
 
-// Step 2: Set up the database in .env file
-// DB_CONNECTION=mysql
-// DB_HOST=127.0.0.1
-// DB_PORT=3306
-// DB_DATABASE=task_manager
-// DB_USERNAME=root
-// DB_PASSWORD=
+ composer create-project --prefer-dist laravel/laravel TaskManager
 
-// Step 3: Create Task Model and Migration
-// Run: php artisan make:model Task -m
+<js2>: 
+DB_CONNECTION=mysql
+ DB_HOST=127.0.0.1
+ DB_PORT=3306
+DB_DATABASE=task_manager
+ DB_USERNAME=root
+DB_PASSWORD=
 
-// database/migrations/xxxx_xx_xx_create_tasks_table.php
+ <js3>:
+ Run: php artisan make:model Task -m
+
+database/migrations/xxxx_xx_xx_create_tasks_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -39,11 +38,11 @@ return new class extends Migration {
     }
 };
 
-// Step 4: Run Migration
-// php artisan migrate
+<js4>: Run Migration
+php artisan migrate
 
-// Step 5: Create Task Controller
-// Run: php artisan make:controller TaskController --resource
+<js5>: Create Task Controller
+Run: php artisan make:controller TaskController --resource
 
 // app/Http/Controllers/TaskController.php
 namespace App\Http\Controllers;
@@ -96,15 +95,15 @@ class TaskController extends Controller
     }
 }
 
-// Step 6: Define Routes in web.php
+<js6>: Define Routes in web.php
 use App\Http\Controllers\TaskController;
 Route::resource('tasks', TaskController::class);
 Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
 
-// Step 7: Create Blade Views (resources/views/tasks/)
-// index.blade.php, create.blade.php, edit.blade.php (Basic form and table views)
+ <js7>: Create Blade Views (resources/views/tasks/)
+index.blade.php, create.blade.php, edit.blade.php (Basic form and table views)
 
-// Step 8: Run the Laravel Development Server
-// php artisan serve
+ Step 8: Run the Laravel Development Server
+php artisan serve
 
-// Visit http://127.0.0.1:8000/tasks to manage tasks
+
