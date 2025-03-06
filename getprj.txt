@@ -1,0 +1,110 @@
+<?php
+// Task Management System in Laravel
+
+// Step 1: Create a Laravel Project
+// Run the following command in your terminal
+// composer create-project --prefer-dist laravel/laravel TaskManager
+
+// Step 2: Set up the database in .env file
+// DB_CONNECTION=mysql
+// DB_HOST=127.0.0.1
+// DB_PORT=3306
+// DB_DATABASE=task_manager
+// DB_USERNAME=root
+// DB_PASSWORD=
+
+// Step 3: Create Task Model and Migration
+// Run: php artisan make:model Task -m
+
+// database/migrations/xxxx_xx_xx_create_tasks_table.php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up()
+    {
+        Schema::create('tasks', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->boolean('completed')->default(false);
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('tasks');
+    }
+};
+
+// Step 4: Run Migration
+// php artisan migrate
+
+// Step 5: Create Task Controller
+// Run: php artisan make:controller TaskController --resource
+
+// app/Http/Controllers/TaskController.php
+namespace App\Http\Controllers;
+
+use App\Models\Task;
+use Illuminate\Http\Request;
+
+class TaskController extends Controller
+{
+    public function index()
+    {
+        $tasks = Task::all();
+        return view('tasks.index', compact('tasks'));
+    }
+
+    public function create()
+    {
+        return view('tasks.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate(['title' => 'required']);
+        Task::create($request->all());
+        return redirect()->route('tasks.index')->with('success', 'Task Created Successfully');
+    }
+
+    public function edit(Task $task)
+    {
+        return view('tasks.edit', compact('task'));
+    }
+
+    public function update(Request $request, Task $task)
+    {
+        $request->validate(['title' => 'required']);
+        $task->update($request->all());
+        return redirect()->route('tasks.index')->with('success', 'Task Updated Successfully');
+    }
+
+    public function destroy(Task $task)
+    {
+        $task->delete();
+        return redirect()->route('tasks.index')->with('success', 'Task Deleted Successfully');
+    }
+
+    public function complete(Task $task)
+    {
+        $task->update(['completed' => true]);
+        return redirect()->route('tasks.index')->with('success', 'Task Marked as Completed');
+    }
+}
+
+// Step 6: Define Routes in web.php
+use App\Http\Controllers\TaskController;
+Route::resource('tasks', TaskController::class);
+Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
+
+// Step 7: Create Blade Views (resources/views/tasks/)
+// index.blade.php, create.blade.php, edit.blade.php (Basic form and table views)
+
+// Step 8: Run the Laravel Development Server
+// php artisan serve
+
+// Visit http://127.0.0.1:8000/tasks to manage tasks
